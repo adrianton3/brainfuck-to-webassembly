@@ -3,23 +3,37 @@
 
 	const { bfToWasm } = bwasm
 
-	const bytes = bfToWasm('+++[>+++<-]>.')
+	const codeElement = document.getElementById('code')
+	const inputElement = document.getElementById('input')
+	const outputElement = document.getElementById('output')
 
-	const importObject = {
-		js: {
-			read () {
-				console.log('read')
-				return 0
-			},
-			write (value) {
-				console.log('write', value)
-			},
-		},
-	}
+	codeElement.value = '+++[>+++<-]>.'
 
-	WebAssembly.instantiate(new Uint8Array(bytes), importObject)
-		.then(({ instance }) => {
-			instance.exports.run()
-			console.log('done')
-		})
+	document.getElementById('run').addEventListener('click', () => {
+		const code = codeElement.value
+		const bytes = bfToWasm(code)
+
+		const input = inputElement.value.split(/\s+/)
+		let inputPointer = 0
+
+		outputElement.value = ''
+
+		const importObject = {
+			js: {
+				read () {
+					const value = input[inputPointer]
+					inputPointer++
+					return value
+				},
+				write (value) {
+					outputElement.value += `${value} `
+				},
+			},
+		}
+
+		WebAssembly.instantiate(new Uint8Array(bytes), importObject)
+			.then(({ instance }) => {
+				instance.exports.run()
+			})
+	})
 })()

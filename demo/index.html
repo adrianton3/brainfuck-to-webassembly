@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>brainfuck to webassembly</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <div class="box">
+            <div>Code</div>
+            <textarea id="code" rows="5" cols="40"></textarea>
+        </div>
+
+        <div class="box">
+            <div>In</div>
+            <textarea id="input" rows="2" cols="40"></textarea>
+        </div>
+
+        <div class="box">
+            <div>Out</div>
+            <textarea id="output" rows="2" cols="40" readonly></textarea>
+        </div>
+
+        <div class="box">
+            <button id="run">Run</button>
+        </div>
+    </div>
+
     <script src="../src/leb.js"></script>
     <script src="../src/bf-to-wasm.js"></script>
 
