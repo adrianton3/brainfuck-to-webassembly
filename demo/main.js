@@ -26,7 +26,7 @@
 					return value
 				},
 				write (value) {
-					outputElement.value += `${value} `
+					outputElement.value += String.fromCharCode(value)
 				},
 			},
 		}
