@@ -7,16 +7,13 @@
 	const inputElement = document.getElementById('input')
 	const outputElement = document.getElementById('output')
 
-	codeElement.value = '+++[>+++<-]>.'
+	codeElement.value = '++++++++[>++++++++<-]>+.'
 
-	document.getElementById('run').addEventListener('click', () => {
-		const code = codeElement.value
-		const bytes = bfToWasm(code)
+	function runWasm (source, input) {
+		const bytes = bfToWasm(source)
 
-		const input = inputElement.value.split(/\s+/)
+		const output = []
 		let inputPointer = 0
-
-		outputElement.value = ''
 
 		const importObject = {
 			js: {
@@ -26,14 +23,27 @@
 					return value
 				},
 				write (value) {
-					outputElement.value += String.fromCharCode(value)
+					output.push(value)
 				},
 			},
 		}
 
-		WebAssembly.instantiate(new Uint8Array(bytes), importObject)
+		return WebAssembly.instantiate(new Uint8Array(bytes), importObject)
 			.then(({ instance }) => {
 				instance.exports.run()
+
+				return output
 			})
+	}
+
+	document.getElementById('run').addEventListener('click', () => {
+		outputElement.value = ''
+
+		runWasm(
+			codeElement.value,
+			inputElement.value.split(/\s+/).map(Number)
+		).then((output) => {
+			outputElement.value = String.fromCharCode(...output)
+		})
 	})
 })()
