@@ -36,14 +36,47 @@
 			})
 	}
 
-	document.getElementById('run').addEventListener('click', () => {
-		outputElement.value = ''
+	function runJs (source, input) {
+		const run = bjs.bfToJs(source)
 
-		runWasm(
-			codeElement.value,
-			inputElement.value.split(/\s+/).map(Number)
-		).then((output) => {
-			outputElement.value = String.fromCharCode(...output)
-		})
-	})
+		const output = []
+		let inputPointer = 0
+
+		function read () {
+			const value = input[inputPointer]
+			inputPointer++
+			return value
+		}
+
+		function write (value) {
+			output.push(value)
+		}
+
+		run({ read, write })
+
+		return Promise.resolve(output)
+	}
+
+	function makeRunHandler (run) {
+		return () => {
+			outputElement.value = ''
+
+			run(
+				codeElement.value,
+				inputElement.value.split(/\s+/).map(Number)
+			).then((output) => {
+				outputElement.value = String.fromCharCode(...output)
+			})
+		}
+	}
+
+	document.getElementById('run-js').addEventListener(
+		'click',
+		makeRunHandler(runJs)
+	)
+
+	document.getElementById('run-wasm').addEventListener(
+		'click',
+		makeRunHandler(runWasm)
+	)
 })()
