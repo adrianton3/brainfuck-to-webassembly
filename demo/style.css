@@ -48,10 +48,13 @@ button {
     height: 35px;
     padding: 3px 8px 0 8px;
     outline: none;
-    float: right;
 }
 
 button:hover {
     background-color: hsl(220, 30%, 60%);
     border-bottom-color: hsl(220, 30%, 35%);
+}
+
+.right {
+    text-align: right;
 }

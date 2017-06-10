@@ -4,13 +4,14 @@
 	const { leb } = bwasm
 
 	function getSize (bodySize) {
-		return bodySize < 124 ? {
-				section: bodySize + 6,
-				run: bodySize + 4,
-			} : {
-				section: bodySize + 7,
-				run: bodySize + 4,
-			}
+		const sectionSize = bodySize < 124 ? bodySize + 6
+			: bodySize < 16374 ? bodySize + 7
+			: bodySize + 8
+
+		return {
+			section: sectionSize,
+			run: bodySize + 4,
+		}
 	}
 
 	const header = ({ bodySize }) => {
