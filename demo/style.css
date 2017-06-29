@@ -1,3 +1,7 @@
+:root {
+    --option-height: 24px;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -5,54 +9,64 @@ html, body {
     height: 100%;
 }
 
-.container {
-    border-left: 1px solid hsl(0, 0%, 83%);
-    border-right: 1px solid hsl(0, 0%, 83%);
-    width: 50%;
-    height: 100%;
-    margin: 0 auto 0 auto;
-}
-
-.box div {
-    color: #888;
-    font-size: 16px;
-    margin-bottom: 2px;
-}
-
 .box {
-    width: 70%;
-    margin: 0 auto 20px auto;
-    padding-top: 20px;
+    width: 480px;
+    margin: 40px auto 0 auto;
 }
 
-.box:last-child {
-    padding-top: 0;
+.controls {
+    width: 50px;
+    height: calc(var(--option-height) * 3 + 2px);
+    border: 1px solid hsl(0, 0%, 83%);
+    border-right: 0;
+    background-color: hsl(0, 0%, 96%);
+    float: left;
+    box-sizing: border-box;
+}
+
+.controls div {
+    box-sizing: border-box;
+    height: var(--option-height);
+    font-size: 12px;
+    padding-top: 4px;
+    padding-left: 8px;
+    font-weight: bold;
+    color: hsl(0, 0%, 50%);
+}
+
+.controls button {
+    width: 100%;
+    height: var(--option-height);
+    text-align: left;
+    border: none;
+    font-size: 12px;
 }
 
 textarea {
-    width: 99%;
+    width: 430px;
+    height: calc(var(--option-height) * 3 + 2px);
+    display: inline-block;
     border: 1px solid hsl(0, 0%, 83%);
     font-size: 20px;
-    background-color: hsl(0, 0%, 96%);;
+    background-color: hsl(0, 0%, 96%);
+    resize: vertical;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 button {
     width: 144px;
     color: hsl(80, 12%, 95%);
     font-weight: bold;
-    font-size: 16px;
-    border-style: solid;
-    border-width: 0 0 2px 0;
-    background-color: hsl(220, 30%, 50%);
-    border-bottom-color: hsl(220, 30%, 30%);
+    border: none;
+    background-color: hsl(220, 40%, 30%);
     height: 35px;
-    padding: 3px 8px 0 8px;
+    padding: 0 8px 0 8px;
     outline: none;
 }
 
-button:hover {
-    background-color: hsl(220, 30%, 60%);
-    border-bottom-color: hsl(220, 30%, 35%);
+button:hover, button.selected {
+    background-color: hsl(220, 40%, 45%);
 }
 
 .right {
