@@ -26,18 +26,25 @@
         <textarea id="input"></textarea>
     </div>
 
+    <div class="box right run">
+        <button id="run-js" title="Compile to JS and run">Run JS</button><!--
+     --><button id="run-wasm" title="Compile to WebAssembly and run">Run Wasm</button>
+    </div>
+
     <div class="box">
         <div class="controls">
             <div>Out</div>
-            <button id="output-char" title="Output as characters">Char</button>
-            <button id="output-num" class="selected" title="Output as numbers">Num</button>
+            <button id="output-char" class="selected" title="Output as characters">Char</button>
+            <button id="output-num" title="Output as numbers">Num</button>
         </div>
         <textarea id="output" readonly></textarea>
     </div>
 
-    <div class="box right">
-        <button id="run-js" title="Compile to JS and run">Run JS</button>
-        <button id="run-wasm" title="Compile to WebAssembly and run">Run Wasm</button>
+    <div class="box">
+        <div class="controls">
+            <div>Stat</div>
+        </div>
+        <textarea id="stat" readonly></textarea>
     </div>
 
     <script src="../src/leb.js"></script>

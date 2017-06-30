@@ -6,16 +6,28 @@
 	const codeElement = document.getElementById('code')
 	const inputElement = document.getElementById('input')
 	const outputElement = document.getElementById('output')
+	const statElement = document.getElementById('stat')
 
 	const options = {
 		inputFormat: 'num',
-		outputFormat: 'num',
+		outputFormat: 'char',
+	}
+
+	const stat = {
+		wasm: {
+			compile: null,
+			run: null,
+		},
+		js: {
+			compile: null,
+			run: null,
+		}
 	}
 
 	function runWasm (source, input) {
-		console.time('bf->wasm compile')
+		const startWasmCompile = performance.now()
 		const bytes = bfToWasm(source)
-		console.timeEnd('bf->wasm compile')
+		stat.wasm.compile = performance.now() - startWasmCompile
 
 		const output = []
 		let inputPointer = 0
@@ -35,18 +47,18 @@
 
 		return WebAssembly.instantiate(new Uint8Array(bytes), importObject)
 			.then(({ instance }) => {
-				console.time('wasm run')
+				const startWasmRun = performance.now()
 				instance.exports.run()
-				console.timeEnd('wasm run')
+				stat.wasm.run = performance.now() - startWasmRun
 
 				return output
 			})
 	}
 
 	function runJs (source, input) {
-		console.time('bf->js compile')
+		const startJsCompile = performance.now()
 		const run = bjs.bfToJs(source)
-		console.timeEnd('bf->js compile')
+		stat.js.compile = performance.now() - startJsCompile
 
 		const output = []
 		let inputPointer = 0
@@ -61,9 +73,9 @@
 			output.push(value)
 		}
 
-		console.time('js run')
+		const startJsRun = performance.now()
 		run({ read, write })
-		console.timeEnd('js run')
+		stat.js.run = performance.now() - startJsRun
 
 		return Promise.resolve(output)
 	}
@@ -85,6 +97,16 @@
 					outputElement.value = options.outputFormat === 'char'
 						? String.fromCharCode(...output)
 						: output.join(' ')
+
+					const stringifyTime = (time) =>
+						time != null ? `${time.toFixed(3)} ms` : '-'
+
+					statElement.value = [
+						`Wasm compile: ${stringifyTime(stat.wasm.compile)}`,
+						`Wasm run: ${stringifyTime(stat.wasm.run)}`,
+						`JS compile: ${stringifyTime(stat.js.compile)}`,
+						`JS run: ${stringifyTime(stat.js.run)}`,
+					].join('\n')
 				})
 			}, 4)
 		}
@@ -131,7 +153,7 @@
 		)
 	}
 
-	codeElement.value = '++++++++[>++++++++<-]>+.'
+	codeElement.value = '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.'
 
 	document.getElementById('run-js').addEventListener(
 		'click',
